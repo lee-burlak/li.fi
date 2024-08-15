@@ -1,23 +1,20 @@
 import styles from "./page.module.css";
-import { Token } from "@/components/Token";
-import { IToken } from "@/types";
-
-async function fetchTokens() {
-  try {
-    return [] as IToken[];
-  } catch (e: unknown) {
-    return [] as IToken[];
-  }
-}
+import { TokenItem } from "@/components/TokenItem";
+import { fetchTokens } from "@/services/api";
 
 export default async function Home() {
-  const tokens = await fetchTokens();
+  const chains = await fetchTokens();
 
   return (
     <main className={styles.main}>
       <div>Tokens</div>
-      {tokens.map((token) => (
-        <Token key={token.id} {...token} />
+      {chains.map(([chainId, tokens]) => (
+        <div key={chainId}>
+          <h5>{chainId}</h5>
+          {tokens.map((token) => (
+            <TokenItem key={token.coinKey} {...token} />
+          ))}
+        </div>
       ))}
     </main>
   );
